@@ -19,6 +19,8 @@ public class CustomerEntity {
 
     private String phone;
 
+    private String email;
+
     private String address;
 
     private String code;

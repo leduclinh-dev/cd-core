@@ -25,4 +25,10 @@ public class AdminProductController {
     public ResponseEntity<?> getListProduct() {
         return new ResponseEntity<>(productService.getListProduct(), HttpStatus.OK);
     }
+    @PostMapping("/deleteProduct")
+    public ResponseEntity<?> deleteProduct(@RequestParam(name = "productId")Long productId) {
+         productService.deleteProduct(productId);
+         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

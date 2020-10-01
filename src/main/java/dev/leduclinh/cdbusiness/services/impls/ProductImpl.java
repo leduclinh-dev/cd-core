@@ -38,4 +38,9 @@ public class ProductImpl implements ProductService {
         }
         return productDTOS;
     }
+
+    @Override
+    public void deleteProduct(Long id) {
+        repository.deleteById(id);
+    }
 }
