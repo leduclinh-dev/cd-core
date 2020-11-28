@@ -24,13 +24,19 @@ public class OrderItemEntity {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private OrderEntity orderId;
 
-    private Integer quantity;
-
     private Timestamp returnDate;
 
     private Integer price;
 
     private Timestamp date;
+
+    private String status;
+
+
+    public OrderItemEntity() {
+
+    }
+
 
 
 }

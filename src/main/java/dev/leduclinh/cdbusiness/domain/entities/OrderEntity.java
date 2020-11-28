@@ -23,15 +23,15 @@ public class OrderEntity {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private CustomerEntity customerId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private UserEntity userId;
+    private String employee;
 
     private Integer total;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orderItem_id", referencedColumnName = "id")
-    private List<OrderItemEntity> orderItemId;
-
     private Timestamp date;
+
+    private String status;
+
+
+
+
 }

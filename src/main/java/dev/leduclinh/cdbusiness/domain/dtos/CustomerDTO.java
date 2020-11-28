@@ -3,6 +3,7 @@ package dev.leduclinh.cdbusiness.domain.dtos;
 import dev.leduclinh.cdbusiness.domain.entities.CustomerEntity;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.core.parameters.P;
 
 @Getter
 @Setter
@@ -22,8 +23,11 @@ public class CustomerDTO {
     public void buildResponse (CustomerEntity entity) {
         if (entity != null) {
             this.code = entity.getCode();
+            this.id = entity.getId();
         }
     }
+
+
     public void buildListResponse (CustomerEntity entity) {
         if (entity != null) {
             this.id = entity.getId();

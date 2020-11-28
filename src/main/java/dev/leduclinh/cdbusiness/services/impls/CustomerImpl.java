@@ -1,9 +1,16 @@
 package dev.leduclinh.cdbusiness.services.impls;
 
 import dev.leduclinh.cdbusiness.domain.dtos.CustomerDTO;
+import dev.leduclinh.cdbusiness.domain.dtos.OrderDTO;
+import dev.leduclinh.cdbusiness.domain.dtos.OrderItemDTO;
 import dev.leduclinh.cdbusiness.domain.entities.CustomerEntity;
+import dev.leduclinh.cdbusiness.domain.entities.OrderEntity;
+import dev.leduclinh.cdbusiness.domain.entities.OrderItemEntity;
 import dev.leduclinh.cdbusiness.domain.requests.employee.CustomerRequest;
+import dev.leduclinh.cdbusiness.domain.responses.CustomerResponse;
 import dev.leduclinh.cdbusiness.repositories.CustomerRepository;
+import dev.leduclinh.cdbusiness.repositories.OrderItemRepository;
+import dev.leduclinh.cdbusiness.repositories.OrderRepository;
 import dev.leduclinh.cdbusiness.services.CustomerService;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +26,12 @@ import java.util.List;
 public class CustomerImpl implements CustomerService {
     @Autowired
     CustomerRepository repository;
+
+    @Autowired
+    OrderRepository orderRepository;
+
+    @Autowired
+    OrderItemRepository orderItemRepository;
 
     @Override
     public CustomerDTO createCustomer(CustomerRequest request) {
@@ -48,5 +61,37 @@ public class CustomerImpl implements CustomerService {
         }
 
         return customerDTOS;
+    }
+
+    @Override
+    public CustomerDTO getCustomer(Long id) {
+        CustomerEntity entity = repository.findById(id).orElse(null);
+        CustomerDTO customerDTO = new CustomerDTO();
+        if (entity != null) {
+            customerDTO.buildListResponse(entity);
+        }
+        return customerDTO;
+    }
+
+    @Override
+    public CustomerResponse getCustomerByCode(String code) {
+        CustomerResponse response = new CustomerResponse();
+        CustomerEntity entity = repository.findByCode(code);
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.buildListResponse(entity);
+        List<OrderDTO> orderDTOS = new ArrayList<>();
+        if (entity != null) {
+            List<OrderEntity> orderEntities = orderRepository.getOrderEntityByCustomerId(entity.getId());
+            List<OrderItemEntity> orderItemEntities = new ArrayList<>();
+            for (OrderEntity orderEntity: orderEntities) {
+                OrderDTO orderDTO = new OrderDTO();
+                orderItemEntities = orderItemRepository.getOrderItemEntityByOrderId(orderEntity.getId());
+                orderDTO.buildOrder(orderEntity, orderItemEntities);
+                orderDTOS.add(orderDTO);
+            }
+        }
+        response.setOrders(orderDTOS);
+        response.setCustomer(customerDTO);
+        return response;
     }
 }

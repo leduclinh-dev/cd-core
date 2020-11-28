@@ -1,5 +1,6 @@
 package dev.leduclinh.cdbusiness.controllers.admin;
 
+import dev.leduclinh.cdbusiness.domain.requests.admin.CreateProductRequest;
 import dev.leduclinh.cdbusiness.domain.requests.admin.ProductRequest;
 import dev.leduclinh.cdbusiness.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,8 @@ public class AdminProductController {
     ProductService productService;
 
     @PostMapping("/createProduct")
-    public ResponseEntity<?> createProduct(@RequestBody ProductRequest productRequest) {
-        productService.createProduct(productRequest);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> createProduct(@RequestBody CreateProductRequest productRequest) {
+        return new ResponseEntity<>(productService.createProduct(productRequest),HttpStatus.OK);
     }
     @GetMapping("/getListProduct")
     public ResponseEntity<?> getListProduct() {

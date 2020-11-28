@@ -24,4 +24,13 @@ public class CustomerController {
     public ResponseEntity<?> getListCustomer() {
         return new ResponseEntity<>(service.getListCustomer(), HttpStatus.OK);
     }
+    @GetMapping("/getCustomerById")
+    public ResponseEntity<?> getCustomerById(@RequestParam(name = "id") Long id ) {
+        return new ResponseEntity<>(service.getCustomer(id), HttpStatus.OK);
+    }
+
+    @GetMapping("getCustomerByCode")
+    public ResponseEntity<?> getCustomerByCode(@RequestParam(name = "code") String code) {
+        return new ResponseEntity<>(service.getCustomerByCode(code), HttpStatus.OK);
+    }
 }

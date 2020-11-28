@@ -14,6 +14,11 @@ public class CategoryDTO {
     public CategoryDTO() {
     }
 
+    public void CategoryDTO(Long id) {
+        if (id !=null) {
+            this.id = id;
+        }
+    }
     public void buildResponse(CategoryEntity entity) {
         if (entity != null) {
           this.id = entity.getId();

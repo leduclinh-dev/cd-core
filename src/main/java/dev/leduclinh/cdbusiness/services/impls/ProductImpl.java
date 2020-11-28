@@ -1,10 +1,16 @@
 package dev.leduclinh.cdbusiness.services.impls;
 
 import dev.leduclinh.cdbusiness.domain.dtos.ProductDTO;
+import dev.leduclinh.cdbusiness.domain.dtos.ProductTitleDTO;
+import dev.leduclinh.cdbusiness.domain.entities.CategoryEntity;
 import dev.leduclinh.cdbusiness.domain.entities.ProductEntity;
+import dev.leduclinh.cdbusiness.domain.entities.ProductTitleEntity;
+import dev.leduclinh.cdbusiness.domain.requests.admin.CreateProductRequest;
 import dev.leduclinh.cdbusiness.domain.requests.admin.ProductRequest;
 import dev.leduclinh.cdbusiness.repositories.ProductRepository;
+import dev.leduclinh.cdbusiness.repositories.ProductTitleRepository;
 import dev.leduclinh.cdbusiness.services.ProductService;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,30 +23,54 @@ import java.util.List;
 @Transactional
 public class ProductImpl implements ProductService {
     @Autowired
-    ProductRepository repository;
+    ProductRepository productRepository;
+
+    @Autowired
+    ProductTitleRepository productTitleRepository;
 
     @Override
-    public void createProduct(ProductRequest request) {
-        ProductEntity productSave = new ProductEntity(request);
-        repository.save(productSave);
+    public ProductTitleDTO createProduct(CreateProductRequest request) {
+        ProductTitleDTO productTitleDTO = new ProductTitleDTO();
+        ProductTitleEntity productTitleEntity = new ProductTitleEntity();
+        ProductEntity productEntity = new ProductEntity();
+        if (request != null) {
+            productTitleEntity.setName(request.getName());
+            productTitleEntity.setCategory(new CategoryEntity(request.getCategoryId()));
+            productTitleEntity.setPrice(request.getPrice());
+            productTitleEntity.setImage(request.getImage());
+            productTitleEntity.setDescription(request.getDescription());
+            productTitleEntity.setQuantity(request.getQuantity());
+            productTitleRepository.save(productTitleEntity);
+            productEntity.setCode(RandomStringUtils.randomAlphabetic(8).toUpperCase());
+            productEntity.setStatus(request.getProduct().getStatus());
+            productEntity.setProductTitleEntity(new ProductTitleEntity(productTitleEntity.getId()));
+            productEntity.setName(productTitleEntity.getName());
+            productRepository.save(productEntity);
+            productTitleEntity.setQuantity(productRepository.findAll().size());
+            productTitleRepository.save(productTitleEntity);
+            request.getProduct().setCode(productEntity.getCode());
+            productTitleDTO.BuildProductTitleDTO(request);
+        }
+        return productTitleDTO;
     }
 
     @Override
-    public List<ProductDTO> getListProduct() {
-        List<ProductEntity> list = repository.findAll();
-        List<ProductDTO> productDTOS = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(list)){
-            for (ProductEntity entity: list) {
-                ProductDTO productDTO = new ProductDTO();
-                productDTO.buildResponse(entity);
-                productDTOS.add(productDTO);
+    public List<ProductTitleDTO> getListProduct() {
+        List<ProductTitleEntity> productTitleEntities = productTitleRepository.findAll();
+        List<ProductEntity> productEntities = productRepository.findAll();
+        List<ProductTitleDTO> productTitleDTOS = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(productTitleEntities)) {
+            for (ProductTitleEntity titleEntity: productTitleEntities) {
+                ProductTitleDTO productTitleDTO = new ProductTitleDTO();
+                productTitleDTO.BuildProductTitleDTOS(titleEntity, productEntities);
+                productTitleDTOS.add(productTitleDTO);
             }
         }
-        return productDTOS;
+        return productTitleDTOS;
     }
 
     @Override
     public void deleteProduct(Long id) {
-        repository.deleteById(id);
+        productRepository.deleteById(id);
     }
 }

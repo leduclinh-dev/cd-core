@@ -26,4 +26,13 @@ public class CustomerEntity {
     private String code;
 
     private Integer debt;
+
+    public CustomerEntity(Long customerId) {
+        if (customerId != null) {
+            id = customerId;
+        }
+    }
+
+    public CustomerEntity() {
+    }
 }

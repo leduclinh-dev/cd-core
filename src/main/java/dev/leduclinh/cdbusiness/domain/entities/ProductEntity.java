@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,33 +17,39 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
-    private Integer price;
-
-    private Integer quantity;
-
-    private String image;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private CategoryEntity category;
-
-    private String description;
-
     private String code;
 
-    public ProductEntity(ProductRequest request) {
-        this.name = request.getName();
-        this.price = request.getPrice();
-        this.quantity = request.getQuantity();
-        this.image = request.getImage();
-        this.category = new CategoryEntity(request.getCategoryId());
-        this.description = request.getDescription();
-        this.code = request.getCode();
+    private String name;
+
+    private String status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_title_id", referencedColumnName = "id")
+    private ProductTitleEntity productTitleEntity;
+
+    public ProductEntity(Long productId) {
+        if (productId != null) {
+            id = productId;
+        }
+    }
+
+    public ProductEntity(ProductEntity productEntity) {
+        id = productEntity.getId();
+        code = productEntity.getCode();
+        status = productEntity.getStatus();
+        name = productEntity.getName();
+        productTitleEntity = null;
     }
 
     public ProductEntity() {
 
     }
+
+    public void ProductEntity(Long id) {
+        if (id != null) {
+            this.productTitleEntity = new ProductTitleEntity(id);
+        }
+    }
+
+
 }
