@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @CrossOrigin
 @Controller
 @RequestMapping("/employee/product")
-public class EmployeeProductController {
+public class ProductController {
     @Autowired
     ProductService productService;
 

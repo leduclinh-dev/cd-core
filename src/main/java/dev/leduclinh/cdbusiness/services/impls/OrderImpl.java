@@ -1,19 +1,16 @@
 package dev.leduclinh.cdbusiness.services.impls;
 
+import dev.leduclinh.cdbusiness.domain.dtos.BookingDTO;
 import dev.leduclinh.cdbusiness.domain.dtos.OrderDTO;
-import dev.leduclinh.cdbusiness.domain.entities.CustomerEntity;
-import dev.leduclinh.cdbusiness.domain.entities.OrderEntity;
-import dev.leduclinh.cdbusiness.domain.entities.OrderItemEntity;
-import dev.leduclinh.cdbusiness.domain.entities.ProductEntity;
+import dev.leduclinh.cdbusiness.domain.entities.*;
+import dev.leduclinh.cdbusiness.domain.requests.employee.CreateBookingRequest;
 import dev.leduclinh.cdbusiness.domain.requests.employee.CreateOrderRequest;
 import dev.leduclinh.cdbusiness.domain.requests.employee.OrderItemRequest;
 import dev.leduclinh.cdbusiness.domain.requests.employee.UpdateOrderRequest;
-import dev.leduclinh.cdbusiness.repositories.CustomerRepository;
-import dev.leduclinh.cdbusiness.repositories.OrderItemRepository;
-import dev.leduclinh.cdbusiness.repositories.OrderRepository;
-import dev.leduclinh.cdbusiness.repositories.ProductRepository;
+import dev.leduclinh.cdbusiness.repositories.*;
 import dev.leduclinh.cdbusiness.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,6 +30,8 @@ public class OrderImpl implements OrderService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+
 
     @Override
     public OrderDTO createOrder(CreateOrderRequest order) {
@@ -58,7 +57,7 @@ public class OrderImpl implements OrderService {
                     productRepository.save(productEntity);
                     orderItemEntity.setDate(item.getDateCurrent());
                     orderItemEntity.setPrice(item.getPrice());
-                    orderItemEntity.setStatus("NO");
+                    orderItemEntity.setStatus("ACTIVE");
                     orderItemEntity.setReturnDate(item.getDateReturn());
                     orderItemRepository.save(orderItemEntity);
             }
@@ -92,6 +91,7 @@ public class OrderImpl implements OrderService {
 
         return null;
     }
+
 
 
 }

@@ -14,7 +14,7 @@ public class OrderItemDTO {
 
     private Long id;
     private Date dateCurrent;
-    private Date returnDate;
+    private Date dateReturn;
     private String status;
     private ProductDTO product;
     private Integer price;
@@ -23,7 +23,7 @@ public class OrderItemDTO {
     public void OrderItemDTO(OrderItemEntity orderItemEntity) {
         id = orderItemEntity.getId();
         dateCurrent = orderItemEntity.getDate();
-        returnDate = orderItemEntity.getReturnDate();
+        dateReturn = orderItemEntity.getReturnDate();
         price = orderItemEntity.getPrice();
         status = orderItemEntity.getStatus();
         ProductDTO productDTO = new ProductDTO();

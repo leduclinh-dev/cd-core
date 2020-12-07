@@ -27,11 +27,6 @@ public class ProductEntity {
     @JoinColumn(name = "product_title_id", referencedColumnName = "id")
     private ProductTitleEntity productTitleEntity;
 
-    public ProductEntity(Long productId) {
-        if (productId != null) {
-            id = productId;
-        }
-    }
 
     public ProductEntity(ProductEntity productEntity) {
         id = productEntity.getId();
@@ -43,6 +38,11 @@ public class ProductEntity {
 
     public ProductEntity() {
 
+    }
+    public ProductEntity(Long idReq) {
+        if (idReq !=null) {
+            id = idReq;
+        }
     }
 
     public void ProductEntity(Long id) {
