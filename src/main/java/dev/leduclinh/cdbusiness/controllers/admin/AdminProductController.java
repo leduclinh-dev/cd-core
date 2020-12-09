@@ -19,7 +19,7 @@ public class AdminProductController {
 
     @PostMapping("/createProduct")
     public ResponseEntity<?> createProduct(@RequestBody CreateProductRequest productRequest) {
-        return new ResponseEntity<>(productService.createProduct(productRequest),HttpStatus.OK);
+        return new ResponseEntity<>(productService.createProductTitle(productRequest),HttpStatus.OK);
     }
     @GetMapping("/getListProduct")
     public ResponseEntity<?> getListProduct() {

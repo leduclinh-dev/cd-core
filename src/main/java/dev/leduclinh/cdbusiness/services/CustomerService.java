@@ -12,4 +12,5 @@ public interface CustomerService {
     List<CustomerDTO> getListCustomer();
     CustomerDTO getCustomer(Long id);
     CustomerResponse getCustomerByCode(String code);
+    String deleteCustomer(Long id);
 }

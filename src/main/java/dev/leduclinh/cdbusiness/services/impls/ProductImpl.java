@@ -29,29 +29,26 @@ public class ProductImpl implements ProductService {
     ProductTitleRepository productTitleRepository;
 
     @Override
-    public ProductTitleDTO createProduct(CreateProductRequest request) {
+    public ProductTitleDTO createProductTitle(CreateProductRequest request) {
         ProductTitleDTO productTitleDTO = new ProductTitleDTO();
         ProductTitleEntity productTitleEntity = new ProductTitleEntity();
-        ProductEntity productEntity = new ProductEntity();
         if (request != null) {
             productTitleEntity.setName(request.getName());
             productTitleEntity.setCategory(new CategoryEntity(request.getCategoryId()));
             productTitleEntity.setPrice(request.getPrice());
             productTitleEntity.setImage(request.getImage());
             productTitleEntity.setDescription(request.getDescription());
-            productTitleEntity.setQuantity(request.getQuantity());
+            productTitleEntity.setQuantity(0);
             productTitleRepository.save(productTitleEntity);
-            productEntity.setCode(RandomStringUtils.randomAlphabetic(8).toUpperCase());
-            productEntity.setStatus(request.getProduct().getStatus());
-            productEntity.setProductTitleEntity(new ProductTitleEntity(productTitleEntity.getId()));
-            productEntity.setName(productTitleEntity.getName());
-            productRepository.save(productEntity);
-            productTitleEntity.setQuantity(productRepository.findAll().size());
-            productTitleRepository.save(productTitleEntity);
-            request.getProduct().setCode(productEntity.getCode());
             productTitleDTO.BuildProductTitleDTO(request);
         }
         return productTitleDTO;
+    }
+
+    @Override
+    public String createProduct() {
+
+        return null;
     }
 
     @Override

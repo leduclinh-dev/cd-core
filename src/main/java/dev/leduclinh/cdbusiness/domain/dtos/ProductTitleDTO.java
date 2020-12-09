@@ -31,7 +31,6 @@ public class ProductTitleDTO {
     private List<ProductDTO> products;
 
     public void BuildProductTitleDTO(CreateProductRequest productRequest) {
-        this.id = productRequest.getId();
         this.name = productRequest.getName();
         this.price = productRequest.getPrice();
         this.image = productRequest.getImage();
@@ -39,12 +38,7 @@ public class ProductTitleDTO {
         categoryDTO.CategoryDTO(productRequest.getCategoryId());
         this.category = categoryDTO;
         this.description = productRequest.getDescription();
-        this.quantity = productRequest.getQuantity();
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.ProductDTO(productRequest.getProduct());
-        List<ProductDTO> productDTOS = new ArrayList<>();
-        productDTOS.add(productDTO);
-        this.products = productDTOS;
+        this.quantity = 0;
     }
 
     public void BuildProductTitleDTOS(ProductTitleEntity productTitleEntity, List<ProductEntity> productEntityList) {

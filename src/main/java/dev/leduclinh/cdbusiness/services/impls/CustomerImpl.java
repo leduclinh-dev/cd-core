@@ -2,7 +2,6 @@ package dev.leduclinh.cdbusiness.services.impls;
 
 import dev.leduclinh.cdbusiness.domain.dtos.CustomerDTO;
 import dev.leduclinh.cdbusiness.domain.dtos.OrderDTO;
-import dev.leduclinh.cdbusiness.domain.dtos.OrderItemDTO;
 import dev.leduclinh.cdbusiness.domain.entities.CustomerEntity;
 import dev.leduclinh.cdbusiness.domain.entities.OrderEntity;
 import dev.leduclinh.cdbusiness.domain.entities.OrderItemEntity;
@@ -93,5 +92,14 @@ public class CustomerImpl implements CustomerService {
         response.setOrders(orderDTOS);
         response.setCustomer(customerDTO);
         return response;
+    }
+
+    @Override
+    public String deleteCustomer(Long id) {
+        if (id != null) {
+            this.repository.deleteById(id);
+            return "SUCCESS";
+        }
+        return "FAIL";
     }
 }
