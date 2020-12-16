@@ -13,4 +13,8 @@ import java.util.List;
 public interface BookingItemRepository extends JpaRepository<BookingItemEntity, Long> {
     @Query("SELECT t from BookingItemEntity t where" + " t.booking=:bookingId ")
     List<BookingItemEntity> findByBookingId(@Param("bookingId") Long bookingId);
+
+    @Query("SELECT t from BookingItemEntity t where" + " t.product.id=:id ")
+    List<BookingItemEntity> findByProduct(@Param("id")Long id);
+
 }

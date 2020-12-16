@@ -6,14 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CreateProductRequest {
-    private String name;
-
-    private Integer price;
-
-    private String image;
-
-    private Long categoryId;
-
-    private String description;
-
+    private Long productTitleId;
+    private String code;
 }

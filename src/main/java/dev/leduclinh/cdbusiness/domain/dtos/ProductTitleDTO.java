@@ -2,7 +2,7 @@ package dev.leduclinh.cdbusiness.domain.dtos;
 
 import dev.leduclinh.cdbusiness.domain.entities.ProductEntity;
 import dev.leduclinh.cdbusiness.domain.entities.ProductTitleEntity;
-import dev.leduclinh.cdbusiness.domain.requests.admin.CreateProductRequest;
+import dev.leduclinh.cdbusiness.domain.requests.admin.CreateProductTitleRequest;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.util.CollectionUtils;
@@ -30,7 +30,7 @@ public class ProductTitleDTO {
 
     private List<ProductDTO> products;
 
-    public void BuildProductTitleDTO(CreateProductRequest productRequest) {
+    public void BuildProductTitleDTO(CreateProductTitleRequest productRequest) {
         this.name = productRequest.getName();
         this.price = productRequest.getPrice();
         this.image = productRequest.getImage();

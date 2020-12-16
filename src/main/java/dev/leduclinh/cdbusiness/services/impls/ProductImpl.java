@@ -2,15 +2,14 @@ package dev.leduclinh.cdbusiness.services.impls;
 
 import dev.leduclinh.cdbusiness.domain.dtos.ProductDTO;
 import dev.leduclinh.cdbusiness.domain.dtos.ProductTitleDTO;
-import dev.leduclinh.cdbusiness.domain.entities.CategoryEntity;
-import dev.leduclinh.cdbusiness.domain.entities.ProductEntity;
-import dev.leduclinh.cdbusiness.domain.entities.ProductTitleEntity;
+import dev.leduclinh.cdbusiness.domain.entities.*;
 import dev.leduclinh.cdbusiness.domain.requests.admin.CreateProductRequest;
-import dev.leduclinh.cdbusiness.domain.requests.admin.ProductRequest;
+import dev.leduclinh.cdbusiness.domain.requests.admin.CreateProductTitleRequest;
+import dev.leduclinh.cdbusiness.repositories.BookingItemRepository;
+import dev.leduclinh.cdbusiness.repositories.OrderItemRepository;
 import dev.leduclinh.cdbusiness.repositories.ProductRepository;
 import dev.leduclinh.cdbusiness.repositories.ProductTitleRepository;
 import dev.leduclinh.cdbusiness.services.ProductService;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +27,14 @@ public class ProductImpl implements ProductService {
     @Autowired
     ProductTitleRepository productTitleRepository;
 
+    @Autowired
+    OrderItemRepository orderItemRepository;
+
+    @Autowired
+    BookingItemRepository bookingItemRepository;
+
     @Override
-    public ProductTitleDTO createProductTitle(CreateProductRequest request) {
+    public ProductTitleDTO createProductTitle(CreateProductTitleRequest request) {
         ProductTitleDTO productTitleDTO = new ProductTitleDTO();
         ProductTitleEntity productTitleEntity = new ProductTitleEntity();
         if (request != null) {
@@ -46,10 +51,26 @@ public class ProductImpl implements ProductService {
     }
 
     @Override
-    public String createProduct() {
-
-        return null;
+    public ProductDTO createProduct(CreateProductRequest productRequest){
+        ProductEntity productEntity = new ProductEntity();
+        ProductDTO productDTO = new ProductDTO();
+        productEntity.setStatus("ACTIVE");
+        productEntity.setProductTitleEntity(new ProductTitleEntity(productRequest.getProductTitleId()));
+        List<ProductEntity> productEntities = this.productRepository.findAll();
+        if (!CollectionUtils.isEmpty(productEntities)) {
+            for(ProductEntity entity: productEntities) {
+                if (entity.getCode().equals(productRequest.getCode())) {
+                    return null;
+                }
+            }
+        }
+        productEntity.setCode(productRequest.getCode());
+        this.productRepository.save(productEntity);
+        productDTO.ProductDTO(productEntity);
+        return productDTO;
     }
+
+
 
     @Override
     public List<ProductTitleDTO> getListProduct() {
@@ -67,7 +88,36 @@ public class ProductImpl implements ProductService {
     }
 
     @Override
-    public void deleteProduct(Long id) {
-        productRepository.deleteById(id);
+    public boolean deleteProduct(Long id) {
+        ProductEntity productEntity = productRepository.findById(id).orElse(null);
+        if (productEntity !=null) {
+            List<OrderItemEntity> orderItemEntities = orderItemRepository.getOrderItemEntityByProductId(id);
+            List<BookingItemEntity> bookingItemEntities = bookingItemRepository.findByProduct(id);
+            for (BookingItemEntity bookingItemEntity: bookingItemEntities) {
+                if (bookingItemEntity.getStatus().equals("ACTIVE")) {
+                    return false;
+                }
+                bookingItemRepository.delete(bookingItemEntity);
+            }
+            for(OrderItemEntity orderItemEntity: orderItemEntities) {
+                if (orderItemEntity.getStatus().equals("ACTIVE")) {
+                    return false;
+                }
+                orderItemRepository.delete(orderItemEntity);
+            }
+            productRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteProductTitle(Long id) {
+        ProductTitleEntity titleEntity = productTitleRepository.findById(id).orElse(null);
+        if (titleEntity != null) {
+            this.productTitleRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }

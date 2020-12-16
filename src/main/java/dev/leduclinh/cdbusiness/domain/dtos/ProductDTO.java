@@ -13,7 +13,6 @@ public class ProductDTO {
     private Long id;
     private String code;
     private String status;
-    private String name;
 
     public ProductDTO() {
     }
@@ -22,7 +21,6 @@ public class ProductDTO {
         if (request != null) {
             this.status = request.getStatus();
             this.code = request.getCode();
-            this.name = request.getName();
         }
     }
 
@@ -31,7 +29,6 @@ public class ProductDTO {
             this.id = entity.getId();
             this.code = entity.getCode();
             this.status = entity.getStatus();
-            this.name = entity.getName();
         }
     }
 

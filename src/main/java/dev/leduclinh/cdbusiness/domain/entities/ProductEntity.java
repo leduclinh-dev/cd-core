@@ -19,8 +19,6 @@ public class ProductEntity {
 
     private String code;
 
-    private String name;
-
     private String status;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,7 +30,6 @@ public class ProductEntity {
         id = productEntity.getId();
         code = productEntity.getCode();
         status = productEntity.getStatus();
-        name = productEntity.getName();
         productTitleEntity = null;
     }
 

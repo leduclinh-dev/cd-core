@@ -1,13 +1,9 @@
 package dev.leduclinh.cdbusiness.domain.entities;
 
-import dev.leduclinh.cdbusiness.domain.requests.admin.CreateProductRequest;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Entity
